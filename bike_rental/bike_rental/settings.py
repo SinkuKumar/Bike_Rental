@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
 LOCAL_APPS = [
     'bikes',
+    'users',
 ]
 
 INSTALLED_APPS += LOCAL_APPS

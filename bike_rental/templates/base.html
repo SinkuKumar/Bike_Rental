@@ -36,7 +36,20 @@
               <a class="nav-link active" aria-current="page" href="{% url 'about' %}">About</a>
             </li>
           </ul>
-        </div>
+        <ul class="navbar-nav ms-auto">
+          {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'bike_list' %}">{{ user.username|title }}</a></li>
+            <li class="nav-item">
+              <form method="POST" action="{% url 'logout' %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">Logout</button>
+              </form>
+            </li>
+          {% else %}
+            <li class="nav-item"><a class="btn btn-primary" href="{% url 'login' %}">Login</a></li>
+            <li class="nav-item"><a class="btn btn-secondary" href="{% url 'bike_list' %}">Register</a></li>
+          {% endif %}
+        </ul>
       </div>
     </nav>
     {% block content %}
