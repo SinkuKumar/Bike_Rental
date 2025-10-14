@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}My Page{% endblock %}
+
+{% block extra_head %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .bike-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
+    }
+    .bike-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+    .bike-img {
+        height: 220px;
+        object-fit: cover;
+        width: 100%;
+        display: block;
+    }
+    .card-body {
+        text-align: center;
+        padding: 1.25rem;
+    }
+    .price {
+        font-weight: 600;
+        color: #198754;
+    }
+    .photo-controls {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-50%);
+        padding: 0 10px;
+    }
+    .photo-controls button {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s;
+    }
+    .photo-controls button:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <form method="get" action="{% url 'bike_search' %}">
+        <div class="input-group col-sm-4">
+            <input type="text" class="form-control" name="q" placeholder="Search for bikes..." value="{{ query|default:'' }}">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+</div>
+<div class="container py-5">
+    <div class="row g-4">
+        {% for bike in bikes %}
+        <div class="col-md-4 col-sm-6">
+            <div class="card bike-card" data-bike-index="{{ forloop.counter0 }}">
+                {% with bike.photos.all as bike_photos %}
+                    {% if bike_photos %}
+                        <img src="{{ bike_photos.0.image.url }}" alt="{{ bike.name }}" class="bike-img" id="bike-img-{{ forloop.counter0 }}">
+                        <div class="photo-controls">
+                            <button onclick="prevPhoto({{ forloop.counter0 }}, {{ bike_photos|length }})">&#10094;</button>
+                            <button onclick="nextPhoto({{ forloop.counter0 }}, {{ bike_photos|length }})">&#10095;</button>
+                        </div>
+                        <script>
+                            // Store all photo URLs for this bike in a JS array
+                            window.bikePhotos = window.bikePhotos || [];
+                            window.bikePhotos[{{ forloop.counter0 }}] = [
+                                {% for photo in bike_photos %}
+                                    "{{ photo.image.url }}"{% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            ];
+                            window.bikePhotoIndex = window.bikePhotoIndex || [];
+                            window.bikePhotoIndex[{{ forloop.counter0 }}] = 0;
+                        </script>
+                    {% else %}
+                        <img src="{% static 'images/placeholder-bike.jpg' %}" alt="No image" class="bike-img">
+                    {% endif %}
+                {% endwith %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ bike.name }}</h5>
+                    <p class="text-muted mb-1">{{ bike.model }}</p>
+                    <p class="price">₹{{ bike.price_per_hour }} / hour</p>
+                    <p class="price">₹{{ bike.price_per_day }} / day</p>
+                    <a 
+                        href="https://wa.me/9717425826?text={{ 'Hello, I am interested in booking the bike: ' | urlencode }}{{ bike.name | urlencode }}" 
+                        target="_blank" 
+                        class="btn btn-success w-100 mt-2">
+                        Book Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function showPhoto(bikeIndex) {
+    const img = document.getElementById(`bike-img-${bikeIndex}`);
+    img.src = window.bikePhotos[bikeIndex][window.bikePhotoIndex[bikeIndex]];
+}
+
+function nextPhoto(bikeIndex, totalPhotos) {
+    window.bikePhotoIndex[bikeIndex] = (window.bikePhotoIndex[bikeIndex] + 1) % totalPhotos;
+    showPhoto(bikeIndex);
+}
+
+function prevPhoto(bikeIndex, totalPhotos) {
+    window.bikePhotoIndex[bikeIndex] = (window.bikePhotoIndex[bikeIndex] - 1 + totalPhotos) % totalPhotos;
+    showPhoto(bikeIndex);
+}
+</script>
+{% endblock %}

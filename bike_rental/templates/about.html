@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - Bike Buddy{% endblock %}
+
+{% block extra_head %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .about-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .about-container h1 {
+        margin-bottom: 1.5rem;
+    }
+    .about-container p {
+        line-height: 1.6;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container about-container mt-5">
+    <h1>About Bike Buddy</h1>
+    <p>Welcome to Bike Buddy, your trusted partner for all your bike rental needs. We are passionate about providing high-quality bikes and exceptional service to ensure you have the best experience possible.</p>
+    <p>Our mission is to make bike rentals easy, affordable, and accessible for everyone. Whether you're looking for a leisurely ride around the city or an adventurous trail ride, we have a wide range of bikes to suit your needs.</p>
+    <p>At Bike Buddy, we prioritize safety and maintenance. All our bikes are regularly inspected and serviced to ensure they are in top condition. Our friendly staff is always ready to assist you in choosing the right bike and providing any necessary gear or accessories.</p>
+    <p>Thank you for choosing Bike Buddy. We look forward to helping you explore the world on two wheels!</p>
+
+    <p class="mt-4">Happy Riding!<br>The Bike Buddy Team</p>
+</div>
+
+<!--Partner with Us, Send whatasapp message to be Partnered with us-->
+<div class="container text-center mt-5">
+    <a href="https://wa.me/9717425826?text=Hello, I am interested in partnering with Bike Buddy." target="_blank" class="btn btn-primary btn-lg">Partner with Us</a>
+</div>
+{% endblock %}
