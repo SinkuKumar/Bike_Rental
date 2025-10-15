@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Bikes - Bike Buddy{% endblock %}
 
 {% block extra_head %}
@@ -9,7 +9,7 @@
 {% block body %}
     <nav class="navbar" style="background-color: #e3f2fd;">
       <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'bike_list' %}">Bike Buddy</a>
+        <a class="navbar-brand" href="{% url 'bike_list' %}"><img src="{% static 'brand/logo.svg' %}" alt="Bike Buddy" style="height: 40px;"></a>
         <button
           class="navbar-toggler"
           type="button"
