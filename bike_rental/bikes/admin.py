@@ -6,13 +6,18 @@ class BikePhotoInline(admin.TabularInline):  # or admin.StackedInline for a larg
     model = BikePhoto
     extra = 1  # how many empty forms to show for adding new photos
 
-# Admin for Bike model
 @admin.register(Bike)
 class BikeAdmin(admin.ModelAdmin):
     inlines = [BikePhotoInline]
-    list_display = ('id', 'name', 'model', 'price_per_hour', 'price_per_day')  # adjust as per your Bike model
+    list_display = ('id', 'name', 'model', 'price_per_hour', 'price_per_day')
+    search_fields = ('name', 'model', 'description')
+    list_filter = ('model',)
+    ordering = ('name',)
 
-# Optional: still register BikePhoto separately if you want to access it directly too
-@admin.register(BikePhoto)
-class BikePhotoAdmin(admin.ModelAdmin):
-    list_display = ('bike', 'image')
+
+# @admin.register(BikePhoto)
+# class BikePhotoAdmin(admin.ModelAdmin):
+#     list_display = ('bike', 'image')
+#     search_fields = ('bike__name',)
+#     list_filter = ('bike__model',)
+#     ordering = ('bike',)
